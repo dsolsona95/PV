@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<title>Processamento de Vídeo - Diego</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<style>
+body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+</style>
+<body class="w3-light-grey">
+
+<!-- w3-content defines a container for fixed size centered content, 
+and is wrapped around the whole page content, except for the footer in this example -->
+<div class="w3-content" style="max-width:1400px">
+
+<!-- Header -->
+<header class="w3-container w3-center w3-padding-32"> 
+  <h1><b>Processamento de Vídeo</b></h1>
+</header>
+
+<!-- Grid -->
+<div class="w3-row">
+
+<!-- Blog entries -->
+<div margin: "auto">
+  <!-- Blog entry -->
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Relatório 2</b></h3>
+    </div>
+  </div>
+<div>
+      <code><p>import numpy as np<br>
+
+import cv2 as cv<br>
+
+from matplotlib import pyplot as plt<br>
+
+img = cv.imread('histology.png')<br>
+
+kernel = np.ones((5,5),np.float32)/25<br>
+
+dst = cv.filter2D(img,-1,kernel)<br>
+
+plt.figure(figsize=(10,10))<br>
+
+plt.subplot(121),plt.imshow(img),plt.title('Original')<br>
+
+plt.xticks([]), plt.yticks([])<br>
+
+plt.subplot(122),plt.imshow(dst),plt.title('Averaging')<br>
+
+plt.xticks([]), plt.yticks([])<br>
+
+plt.show()</p></code>
+
+  </div>
+<div>
+      <code><p>import numpy as np<br>
+
+import cv2 as cv<br>
+
+from matplotlib import pyplot as plt<br>
+
+img = cv.imread('histology.png')<br>
+
+kernel = np.ones((5,5),np.float32)/25<br>
+
+dst = cv.filter2D(img,-1,kernel)<br>
+
+plt.figure(figsize=(10,10))<br>
+
+plt.subplot(121),plt.imshow(img),plt.title('Original')<br>
+
+plt.xticks([]), plt.yticks([])<br>
+
+plt.subplot(122),plt.imshow(dst),plt.title('Averaging')<br>
+
+plt.xticks([]), plt.yticks([])<br>
+
+plt.show()</p></code>
+
+  </div>
+<div>
+      <code><p>import cv2 as cv<br>
+import numpy as np<br>
+from matplotlib import pyplot as plt<br>
+img = cv.imread('histology.png')<br>
+blur = cv.blur(img,(5,5))<br>
+plt.figure(figsize=(10, 10))<br>
+plt.subplot(121),plt.imshow(img),plt.title('Original')<br>
+plt.xticks([]), plt.yticks([])<br>
+plt.subplot(122),plt.imshow(blur),plt.title('Blurred')<br>
+plt.xticks([]), plt.yticks([])<br>
+plt.show()</p></code>
+
+  </div>
+<div>
+      <code><p>blur = cv.GaussianBlur(img,(5,5),0)<br>
+plt.figure(figsize=(10, 10))<br>
+plt.subplot(121),plt.imshow(img),plt.title('Original')<br>
+plt.xticks([]), plt.yticks([])<br>
+plt.subplot(122),plt.imshow(blur),plt.title('Blurred')<br>
+plt.xticks([]), plt.yticks([])<br>
+plt.show()</p></code>
+
+  </div>
+<div>
+      <code><p>median = cv.medianBlur(img,5)<br>
+plt.figure(figsize=(10, 10))<br>
+plt.subplot(121),plt.imshow(img),plt.title('Original')<br>
+plt.xticks([]), plt.yticks([])<br>
+plt.subplot(122),plt.imshow(median),plt.title('Blurred')<br>
+plt.xticks([]), plt.yticks([])<br>
+plt.show()</code>
+
+  </div>
+<div>
+      <code>blur = cv.bilateralFilter(img,9,75,75)<br>
+plt.figure(figsize=(10, 10))<br>
+plt.subplot(121),plt.imshow(img),plt.title('Original')<br>
+plt.xticks([]), plt.yticks([])<br>
+plt.subplot(122),plt.imshow(median),plt.title('Blurred')<br>
+plt.xticks([]), plt.yticks([])<br>
+plt.show()</code>
+
+  </div>
+  <hr>
+<!-- END BLOG ENTRIES -->
+</div>
+
+<!-- END GRID -->
+</div><br>
+
+<!-- END w3-content -->
+</div>
+
+<!-- Footer -->
+<footer class="w3-container w3-dark-grey w3-padding-32 w3-margin-top">
+  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+</footer>
+
+</body>
+</html>
