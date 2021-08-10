@@ -14273,7 +14273,7 @@ a.anchor-link {
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Primeiro-vamos-importar-as-bibliotecas-utilizadas-nessa-atividade">Primeiro vamos importar as bibliotecas utilizadas nessa atividade<a class="anchor-link" href="#Primeiro-vamos-importar-as-bibliotecas-utilizadas-nessa-atividade">&#182;</a></h2>
+<h2 id="Script-utilizado-para-a-execu&#231;&#227;o-do-rastreamento">Script utilizado para a execu&#231;&#227;o do rastreamento<a class="anchor-link" href="#Script-utilizado-para-a-execu&#231;&#227;o-do-rastreamento">&#182;</a></h2>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
@@ -14281,19 +14281,23 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">cv2</span>
-<span class="kn">import</span> <span class="nn">sys</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># importando as bibliotecas utilizadas no script</span>
+<span class="kn">import</span> <span class="nn">cv2</span> <span class="c1">#opencv</span>
+<span class="kn">import</span> <span class="nn">sys</span> <span class="c1">#bibloteca de funções do sistemas, util para navegar,criar e modificar pastas e arquivos</span>
 
+<span class="c1"># verificando a versao exata do opencv instalado para identificar a estrtura de inicializacao dos trackers</span>
 <span class="p">(</span><span class="n">major_ver</span><span class="p">,</span> <span class="n">minor_ver</span><span class="p">,</span> <span class="n">subminor_ver</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
 
+<span class="c1"># executa apenas se o script foi executado diretamente</span>
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span> <span class="p">:</span>
 
-    <span class="c1"># Set up tracker.</span>
-    <span class="c1"># Instead of MIL, you can also use</span>
-
+    <span class="c1"># Lista os trackers disponiveis na biblioteca cv2</span>
     <span class="n">tracker_types</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;BOOSTING&#39;</span><span class="p">,</span> <span class="s1">&#39;MIL&#39;</span><span class="p">,</span><span class="s1">&#39;KCF&#39;</span><span class="p">,</span> <span class="s1">&#39;TLD&#39;</span><span class="p">,</span> <span class="s1">&#39;MEDIANFLOW&#39;</span><span class="p">,</span> <span class="s1">&#39;GOTURN&#39;</span><span class="p">,</span> <span class="s1">&#39;CSRT&#39;</span><span class="p">]</span>
+    
+    <span class="c1"># neste caso utilizaremos apenas o método KCF</span>
     <span class="n">tracker_type</span> <span class="o">=</span> <span class="n">tracker_types</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
 
+    <span class="c1"># diferencia a inicializacao do tracker de acordo com a versao do opencv instalado</span>
     <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">minor_ver</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
         <span class="n">tracker</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">Tracker_create</span><span class="p">(</span><span class="n">tracker_type</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -14312,65 +14316,66 @@ a.anchor-link {
         <span class="k">if</span> <span class="n">tracker_type</span> <span class="o">==</span> <span class="s2">&quot;CSRT&quot;</span><span class="p">:</span>
             <span class="n">tracker</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">TrackerCSRT_create</span><span class="p">()</span>
 
-    <span class="c1"># Read video</span>
+    <span class="c1"># realiza a leitura do vídeo que iremos utilizar para realizar a captura</span>
     <span class="n">video</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="s2">&quot;sample-mp4.mp4&quot;</span><span class="p">)</span>
 
-    <span class="c1"># Exit if video not opened.</span>
+    <span class="c1"># caso o video não for aberto corretamente o scrip é terminado</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">video</span><span class="o">.</span><span class="n">isOpened</span><span class="p">():</span>
         <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Could not open video&quot;</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 
-    <span class="c1"># Read first frame.</span>
+    <span class="c1"># realiza a leitura do primeiro quadro para selecionar o objeto para ser trackeado, se houver erro na leitura o script é terminado</span>
     <span class="n">ok</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">video</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">:</span>
         <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Cannot read video file&#39;</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
     
-    <span class="c1"># Define an initial bounding box</span>
+    <span class="c1"># inicializa a tupla para a seleção do objeto</span>
     <span class="n">bbox</span> <span class="o">=</span> <span class="p">(</span><span class="mi">287</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">320</span><span class="p">)</span>
 
-    <span class="c1"># Uncomment the line below to select a different bounding box</span>
+    <span class="c1"># pede ao usuário que seleciona a area com o objeto a ser rastreado</span>
     <span class="n">bbox</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">selectROI</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
-    <span class="c1"># Initialize tracker with first frame and bounding box</span>
+    <span class="c1"># inicializa o rastreamento</span>
     <span class="n">ok</span> <span class="o">=</span> <span class="n">tracker</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">bbox</span><span class="p">)</span>
 
+    <span class="c1"># looping de leitura e rastreamento de novos pixels enquanto o video não terminar</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="c1"># Read a new frame</span>
+        <span class="c1"># le um novo quadro e termina o script caso nao for possivel le-lo</span>
         <span class="n">ok</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">video</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">:</span>
             <span class="k">break</span>
         
-        <span class="c1"># Start timer</span>
+        <span class="c1"># inicializa o timer para calcular o numero de quadros por segundo</span>
         <span class="n">timer</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">getTickCount</span><span class="p">()</span>
 
-        <span class="c1"># Update tracker</span>
+        <span class="c1"># atualiza o rastreamento no novo quadro</span>
         <span class="n">ok</span><span class="p">,</span> <span class="n">bbox</span> <span class="o">=</span> <span class="n">tracker</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
 
-        <span class="c1"># Calculate Frames per second (FPS)</span>
+        <span class="c1"># calcula o numero de quadros por segundo</span>
         <span class="n">fps</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">getTickFrequency</span><span class="p">()</span> <span class="o">/</span> <span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">getTickCount</span><span class="p">()</span> <span class="o">-</span> <span class="n">timer</span><span class="p">);</span>
 
-        <span class="c1"># Draw bounding box</span>
+        <span class="c1"># desenha a atualizacao da area do objeto rastreado</span>
         <span class="k">if</span> <span class="n">ok</span><span class="p">:</span>
             <span class="c1"># Tracking success</span>
             <span class="n">p1</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
             <span class="n">p2</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bbox</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">bbox</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
             <span class="n">cv2</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span> <span class="p">:</span>
-            <span class="c1"># Tracking failure</span>
+            <span class="c1"># indica a falha na leitura do objeto rastreado</span>
             <span class="n">cv2</span><span class="o">.</span><span class="n">putText</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s2">&quot;Tracking failure detected&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">80</span><span class="p">),</span> <span class="n">cv2</span><span class="o">.</span><span class="n">FONT_HERSHEY_SIMPLEX</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">255</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span>
 
-        <span class="c1"># Display tracker type on frame</span>
+        <span class="c1"># mostra o tipo de rastreador que está sendo utilizado</span>
         <span class="n">cv2</span><span class="o">.</span><span class="n">putText</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">tracker_type</span> <span class="o">+</span> <span class="s2">&quot; Tracker&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">20</span><span class="p">),</span> <span class="n">cv2</span><span class="o">.</span><span class="n">FONT_HERSHEY_SIMPLEX</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">170</span><span class="p">,</span><span class="mi">50</span><span class="p">),</span><span class="mi">2</span><span class="p">);</span>
     
-        <span class="c1"># Display FPS on frame</span>
+        <span class="c1"># mostra o numero de quadros por segundo</span>
         <span class="n">cv2</span><span class="o">.</span><span class="n">putText</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s2">&quot;FPS : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">fps</span><span class="p">)),</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">50</span><span class="p">),</span> <span class="n">cv2</span><span class="o">.</span><span class="n">FONT_HERSHEY_SIMPLEX</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">170</span><span class="p">,</span><span class="mi">50</span><span class="p">),</span> <span class="mi">2</span><span class="p">);</span>
 
 
-        <span class="c1"># Display result</span>
+        <span class="c1"># atualiza a exibicao com o novo quadro, com o video, o objeto rastreado, o tipo do rastreador e a contagem de frames</span>
         <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s2">&quot;Tracking&quot;</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span>
 
-        <span class="c1"># Exit if ESC pressed</span>
+        <span class="c1"># o script é terminado se a tecla esc for pressionada</span>
         <span class="n">k</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span>
         <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">27</span> <span class="p">:</span> <span class="k">break</span>
 </pre></div>
@@ -14383,17 +14388,17 @@ a.anchor-link {
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Resultado">Resultado<a class="anchor-link" href="#Resultado">&#182;</a></h2>
+<h2 id="Resultado---KCF">Resultado - KCF<a class="anchor-link" href="#Resultado---KCF">&#182;</a></h2>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Video</span>
 <span class="c1"># Vídeo Base: Monologo de Grasiela Camargo - https://www.youtube.com/watch?v=AbrTiNZ7wd4</span>
-<span class="n">Video</span><span class="p">(</span><span class="s2">&quot;result.mkv&quot;</span><span class="p">)</span>
+<span class="n">Video</span><span class="p">(</span><span class="s2">&quot;result1.mkv&quot;</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14409,12 +14414,12 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[2]:</div>
 
 
 
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
-<video src="result.mkv" controls  >
+<video src="result1.mkv" controls  >
       Your browser does not support the <code>video</code> element.
     </video>
 </div>
@@ -14425,6 +14430,62 @@ a.anchor-link {
 
 </div>
 
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h2 id="Resultado-MIL">Resultado MIL<a class="anchor-link" href="#Resultado-MIL">&#182;</a></h2>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Video</span>
+<span class="c1"># Vídeo Base: Monologo de Grasiela Camargo - https://www.youtube.com/watch?v=AbrTiNZ7wd4</span>
+<span class="n">Video</span><span class="p">(</span><span class="s2">&quot;result2.mkv&quot;</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[1]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<video src="result2.mkv" controls  >
+      Your browser does not support the <code>video</code> element.
+    </video>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h1 id="Coment&#225;rios">Coment&#225;rios<a class="anchor-link" href="#Coment&#225;rios">&#182;</a></h1>
+</div>
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Apesar do tracker MIL aparentar oscilar menor a caixa de seleção durante o vídeo a sua performance em quesito de quadros por segundo foi imensamente inferior ao KCF, com uma taxa média de 25 e 55 quadros por segundos respectivamente.</p>
+
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
